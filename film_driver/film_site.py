@@ -2,12 +2,14 @@ import re
 
 from .film_base import FilmBase
 from .phimmoi import PhimMoi
+from .vungtv import VungTV
 
 
 class FilmSite(FilmBase):
 
     domains = {
         'http://www.phimmoi.net': PhimMoi,
+        'http://vungtv.com': VungTV,
     }
 
     def __init__(self, url):
@@ -26,7 +28,7 @@ class FilmSite(FilmBase):
         self.fetch_url(url)
 
     def get_link(self):
-        return ''
+        return []
 
     def get_playlist(self):
         return []

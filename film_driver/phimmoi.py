@@ -12,7 +12,7 @@ class PhimMoi(FilmBase):
 
     def get_link(self):
         soup = BeautifulSoup(self.content, 'html.parser')
-        script = soup.find('script', onload='checkEpisodeInfoLoaded(this)')
+        script = soup.find('script', {'onload': 'checkEpisodeInfoLoaded(this)'})
         src = script['src'].replace('javascript', 'json')
         episode_info = requests.get(src).json()
         videos = episode_info['medias']
@@ -22,5 +22,12 @@ class PhimMoi(FilmBase):
         return videos
 
     def get_playlist(self):
-        return []
-
+        soup = BeautifulSoup(self.content, 'html.parser')
+        episodes = soup.find_all('li', {'class': 'episode'})
+        playlist = []
+        for episode in episodes:
+            playlist.append({
+                'name': episode.find('a')['title'],
+                'url': 'http://www.phimmoi.net/' + episode.find('a')['href'],
+            })
+        return playlist
